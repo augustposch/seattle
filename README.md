@@ -56,7 +56,7 @@ Please refer to Models_Aug02.ipynb for work done through 8/8/22.
       - Fit linear regression and scored as classfication - 0 or near-0 predictions of >74 - not useful
     - Tried removing 70-79 passenger values to help classifier focus on the important distinction - success, but need more proof that this is best
 
-- Next steps
+### Next steps
   - Compare predictive models
     - Try using features from PCA and seasonal trend
     - Try regression-based approaches and classification-based approaches
