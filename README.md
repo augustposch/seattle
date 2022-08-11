@@ -5,6 +5,58 @@ I am keeping this repository private, because the data was granted to me through
 
 Please refer to Models_Aug02.ipynb for work done through 8/8/22.
 
+## Latest news
+
+I fit some seasonal trends to the data, and I also made clear visualizations of the dataset. Bonus: PCA on stations has a nice visual and interpretation.
+
+![figW](/images/imageW.png)
+
+Above is EDA showing that we have more observations during weekday rush hours. Sound Transit runs more vehicles at those times.
+
+![figX](/images/imageX.png)
+
+Above we see that the mean passenger values have maxima at weekday rush hours. Mon-Thurs have a different pattern than Sat-Sun. Friday is somewhere in between.
+
+![figY](/images/imageY.png)
+
+Above we see mean passenger values after we remove seasonal and week-period trends. For this plot, that comes down to adjusting the height of each day-of-week's curve, without changing its shape.
+
+I'd like to do something more interesting with the trend-removed data. Coming soon...
+
+How did I fit the trends? See below for reference.
+
+![figA](/images/imageA.png)
+
+![figB](/images/imageB.png)
+
+![figC](/images/imageC.png)
+
+![figD](/images/imageD.png)
+
+![figE](/images/imageE.png)
+
+Bonus! PCA on stations reveals interesting patterns.
+
+![figZ](/images/imageZ.png)
+
+Notice that if you connect the point in the order the train visits them, it's a butterfly shape.
+
+Conclusions from plot:
+- PC1 mostly captures city center stations versus outer stations.
+- PC2 mostly captures Northbound vs Southbound.
+
+Conclusions from loadings:
+  - (from PC2) On weekend mornings, Northbound stops may be more crowded than Southbound.
+  - (from PC1) On weekend mornings, city center stops may be more crowded than outer stops.
+  - (from PC2) On weekday 4-6pm times, Southbound stops may be more crowded than Northbound stops.
+  - (from PC1) On weekday late-nights, outer stops may be more crowded than city center stops.
+    - This is explained by the the airport stop and the college stop at either end - both would spur late-night crowds!
+
+
+
+
+
+
 ## Summary of work so far
 
 - Data cleaning
