@@ -3,7 +3,7 @@
 
 My comments/questions on August's repo: https://github.com/augustposch/seattle
 
-# Comments/questions/recommendations -- 16 Aug
+### Comments/questions/recommendations -- 16 Aug
 
 * Figure 1 -- # of observations
   * number of observations == sum over every station, all trains going in each direction
