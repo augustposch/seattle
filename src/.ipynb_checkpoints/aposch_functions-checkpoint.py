@@ -137,18 +137,48 @@ def clean_data(df):
     return df04
 
 
-def fit_seasonal_cycle(ser):
-    print('hello')
+def create_byday(doy_avg, weekly_avg, year_prd_cycle):
+    
+    weekly_avg.name = 'WkMeanPassw'
+    year_prd_cycle.name = 'Sinu01Passw'
 
-def fit_day_of_week_cycle(ser):
-    print('hello')
+    byday = pd.DataFrame()
+    byday['Date'] = pd.date_range("2019-01-01", periods=365, freq="D")
+    byday['DOW'] = byday['Date'].dt.day_of_week
+    byday['WOY'] = byday['Date'].dt.isocalendar().week
+    byday['DOY'] = byday['Date'].dt.day_of_year
+    byday = byday.set_index('DOY')
 
-def add_cycle_subtracted_features(df):
-    
-    fit_seasonal_cycle(df['passwithin'])
-    
-    fit_day_of_week_cycle(df['passwithin'])
-    print('All done!')
-    
-    
+    byday['DayMeanPassw'] = doy_avg
+    byday = byday.join(weekly_avg, on='WOY')
+    byday = byday.join(year_prd_cycle, on='WOY')
+    byday['Removed01'] = byday['DayMeanPassw'] - byday['Sinu01Passw']
+
+    return byday
+
+
+def create_bydow(byday):
+    # take the by-day df and group by day of week
+    bydow = pd.DataFrame()
+    bydow['Cycle02A'] = byday.groupby('DOW')['Removed01'].mean()
+    bydow['Cycle02B'] = np.where(bydow.index<5, np.mean(bydow.loc[:4,'Cycle02A']),
+                                np.mean(bydow.loc[5:,'Cycle02A']))
+    return bydow
+
+
+def improve_byday(byday, bydow):
+    byday = byday.join(bydow, on='DOW')
+    byday['Removed02A'] = byday['Removed01'] - byday['Cycle02A']
+    byday['Removed02B'] = byday['Removed01'] - byday['Cycle02B']    
+    return byday
+
+
+def create_df05_train(df04_train, byday, bydow):
+    df05_train = df04_train.copy()
+    df05_train = df05_train.join(byday['Sinu01Passw'], on='WOY')
+    df05_train = df05_train.join(bydow, on='DOW')
+    df05_train['Removed01'] = df05_train['passwithin'] - df05_train['Sinu01Passw']
+    df05_train['Removed02A'] = df05_train['Removed01'] - df05_train['Cycle02A']
+    df05_train['Removed02B'] = df05_train['Removed01'] - df05_train['Cycle02B']
+    return df05_train
     
