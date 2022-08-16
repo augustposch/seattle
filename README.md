@@ -3,9 +3,9 @@ Transit ridership prediction on the Seattle light rail.
 
 I am keeping this repository private, because the data was granted to me through a public records request.
 
-**8/15: Currently in the process of nicely organizing this repo. Please explore different sections of the project by reading the notebooks in the /notebooks folder.
+**8/15: Currently in the process of nicely organizing this repo. Please explore different sections of the project by reading the notebooks in the /notebooks folder.**
 
-Please refer to Models_Aug02.ipynb for one giant notebook with all work done through 8/8/22.**
+**Please refer to Models_Aug02.ipynb for one giant notebook with all work done through 8/8/22.**
 
 ## Partial story (8/8)
 
