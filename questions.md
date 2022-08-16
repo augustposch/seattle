@@ -6,7 +6,7 @@ My comments/questions on August's repo: https://github.com/augustposch/seattle
 # Comments/questions/recommendations -- 16 Aug
 
 * Figure 1 -- # of observations
-  * # of observations == sum over every station, all trains going in each direction
+  * number of observations == sum over every station, all trains going in each direction
   * Title should be something like: Number of observations -- sorted by hour of day and day of week
     * Vertical axis shouldn't be density -- should be something computed -- too hard to know what it is
     * the smoothness of the KDEs is artificial and confusing
