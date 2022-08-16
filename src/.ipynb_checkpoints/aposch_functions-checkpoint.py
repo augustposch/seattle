@@ -182,3 +182,37 @@ def create_df05_train(df04_train, byday, bydow):
     df05_train['Removed02B'] = df05_train['Removed01'] - df05_train['Cycle02B']
     return df05_train
     
+
+def sinu(x, a, c, d):
+    b = 6.28/52 # forces the period to be 1 year
+    return a * np.sin(b * (x - c)) + d
+
+
+def do_cycles_processing(df04_train, return_all_frames=False):
+
+    pw_agg_doy = df04_train.groupby(['DOY'])['passwithin'].mean()
+    pw_agg_woy = df04_train.groupby(['WOY'])['passwithin'].mean()
+
+    params, params_covariance = optimize.curve_fit(sinu, pw_agg_woy.index, pw_agg_woy,
+                                                   p0=[3, 13, 33])
+
+    x_data = pw_agg_woy.index
+    y_sinu_year = pd.Series(data=sinu(x_data, params[0], params[1], params[2]),
+                       index=x_data)
+
+    byday = create_byday(pw_agg_doy, pw_agg_woy, y_sinu_year)
+
+    bydow = create_bydow(byday)
+
+    byday = improve_byday(byday, bydow)
+
+    df05_train = create_df05_train(df04_train, byday, bydow)
+
+    if return_all_frames==True:
+        return df05_train, byday, bydow
+
+    if return_all_frames==False:
+        return df05_train
+
+
+    

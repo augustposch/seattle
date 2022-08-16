@@ -3,9 +3,11 @@ Transit ridership prediction on the Seattle light rail.
 
 I am keeping this repository private, because the data was granted to me through a public records request.
 
-Please refer to Models_Aug02.ipynb for work done through 8/8/22.
+**8/15: Currently in the process of nicely organizing this repo. Please explore different sections of the project by reading the notebooks in the /notebooks folder.
 
-## Latest news
+Please refer to Models_Aug02.ipynb for one giant notebook with all work done through 8/8/22.**
+
+## Partial story (8/8)
 
 I fit some seasonal trends to the data, and I also made clear visualizations of the dataset. Bonus: PCA on stations has a nice visual and interpretation.
 
