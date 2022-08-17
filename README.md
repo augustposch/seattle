@@ -3,45 +3,62 @@ Transit ridership prediction on the Seattle light rail.
 
 I am keeping this repository private, because the data was granted to me through a public records request.
 
-**8/15: Currently in the process of nicely organizing this repo. Please explore different sections of the project by reading the notebooks in the /notebooks folder.**
+**8/15: Currently in the process of nicely organizing this repo. Please explore different sections of the project by reading the individual notebooks in the /notebooks folder.**
 
 **Please refer to Models_Aug02.ipynb for one giant notebook with all work done through 8/8/22.**
 
-## Partial story (8/8)
+## The story (8/16)
 
-I fit some seasonal trends to the data, and I also made clear visualizations of the dataset. Bonus: PCA on stations has a nice visual and interpretation.
+1. To get familiar with the dataset, let's look at **which days and times we have observations**:
 
-![figW](/images/imageW.png)
+![fig1](/images/CountObs1.png)
 
-Above is EDA showing that we have more observations during weekday rush hours. Sound Transit runs more vehicles at those times.
+We have more observations during weekday rush hours. Sound Transit runs more vehicles at those times.
 
-![figX](/images/imageX.png)
+2. Let's look at the **mean passengers** grouped by day of week and hour of day. This mean does not care about station or direction - all observations in a day-of-week-and-hour-of-day bucket are used to compute that bucket's mean, regardless of which station or direction they were.
 
-Above we see that the mean passenger values have maxima at weekday rush hours. Mon-Thurs have a different pattern than Sat-Sun. Friday is somewhere in between.
+![fig2](/images/MeanPass1.png)
 
-![figY](/images/imageY.png)
+We see that the mean passenger values have maxima at weekday rush hours. Mon-Thurs have a different pattern than Sat-Sun. Friday is somewhere in between.
 
-Above we see mean passenger values after we remove seasonal and week-period trends. For this plot, that comes down to adjusting the height of each day-of-week's curve, without changing its shape.
+3. Let's figure out what kinds of times we might see **crowded observations**. Here's a week in late August 2019 at the Pioneer Square station. Keep in mind each rail vehicle has 74 seats plus standing room.
 
-I'd like to do something more interesting with the trend-removed data. Coming soon...
+![fig3](/images/ScatterPioneer1.png)
 
-How did I fit the trends? See below for reference.
+Looking at the above plot gives us some insights.
+- T are more observations with >74 passengers for this station-week than in the dataset in general. By eye it appears that about a quarter of all these observations are >74 passengers, whereas other EDA revealed that only 10% of all observations are >74 passengers.
+- The most-crowded times were weekday mornings and weekday evenings
+- On weekday mornings, all the most crowded trains were northbound. I assume these crowds are commuters.
+- On weekday evenings, all the most crowded trains were southbound. I assume these crowds are the commuters again.
+- On Tuesday, Friday, and Saturday, there were also a few very crowded northbound trains around 11pm. I assume these crowds are people having a fun night out. (Perhaps there was an event Tuesday night? A quick Google didn't turn up anything.)
 
-![figA](/images/imageA.png)
+4. Let's find the **seasonal pattern** in crowdedness. A sinusoidal curve is common practice for a seasonal cycle, so that's what we'll fit.
 
-![figB](/images/imageB.png)
+![fig4](/images/DateSeasonal1.png)
 
-![figC](/images/imageC.png)
+5. Here is **what's left in the data** after we remove that seasonal cycle.
 
-![figD](/images/imageD.png)
+![fig5](/images/DateSeasonal2.png)
 
-![figE](/images/imageE.png)
+Here I'll stop and address what you may be thinking: October 26-27 and October 12-13 were big dips in passengers. These dips in passengers came from planned construction that closed the downtown section of the line. https://www.soundtransit.org/get-to-know-us/news-events/news-releases/construction-will-close-light-rail-downtown-seattle-three
 
-Bonus! PCA on stations reveals interesting patterns.
+6. Finally, note that we can remove the **week-period pattern** (i.e. remove the day-of-week specific mean for each day of the week) to get this:
 
-![figZ](/images/imageZ.png)
+![fig6](/images/DateWeekPrd1.png)
 
-Notice that if you connect the point in the order the train visits them, it's a butterfly shape.
+It looks mostly like noise to my eyes, which means we did a good job removing the repeating patterns (year-long and week-long, as explained above.)
+
+7. Let's take a different tack, and try to **understand days better**. I used a dataset of mean passengers, grouped by day of year, hour, and station-direction. I had one row for each day of the year, and collapsed the variance of the 768 columns down to just two PCA components.
+
+![fig7](/images/PCA_days.png)
+
+We see that one cluster is commuter days - every day in this cluster is a weekday. The other cluster is non-commuter days - this cluster consists of weekends and similar days, like July 5th, Black Friday, and snowstorms. *add more explanation here*
+
+8. Let's take yet a different tack, and try to **understand stations better**. I used a dataset of mean passengers, grouped by station-direction, day of year and hour. I had one row for each station-direction, and collapsed the variance of the 7000 columns down to just two PCA components.
+
+![fig8](/images/PCA_stations.png)
+
+Notice that if you connect the points in the order the train visits them, it's a butterfly shape.
 
 Conclusions from plot:
 - PC1 mostly captures city center stations versus outer stations.
@@ -54,12 +71,14 @@ Conclusions from loadings:
   - (from PC1) On weekday late-nights, outer stops may be more crowded than city center stops.
     - This is explained by the the airport stop and the college stop at either end - both would spur late-night crowds!
 
+9. Next step: Predictive modeling. But we'll be sure not to use future information to predict the past.
+
+*Add figure here when I do it*
+
+That's it for now! All below this sentence is old.
 
 
-
-
-
-## Summary of work so far
+## OLD - Summary of work so far
 
 - Data cleaning
   - Which datapoints can be trusted? If not, remove them.
@@ -110,7 +129,7 @@ Conclusions from loadings:
       - Fit linear regression and scored as classfication - 0 or near-0 predictions of >74 - not useful
     - Tried removing 70-79 passenger values to help classifier focus on the important distinction - success, but need more proof that this is best
 
-### Next steps
+### OLD - Next steps
   - Compare predictive models
     - Try using features from PCA and seasonal trend
     - Try regression-based approaches and classification-based approaches

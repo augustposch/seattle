@@ -43,7 +43,7 @@ def clean_data(df):
     
     Adds threshold features and time features.
     
-    Removes bogus observations. Requires routes_against_calc and abnormal_stadir_routes .csv files to be present.
+    Removes bogus observations. Requires routes_against_calc and abnormal_stadir_routes .csv files to be present in the /data folder
     
     Result is a 1208360 by 58 DataFrame.
     '''
@@ -125,13 +125,13 @@ def clean_data(df):
 
 
     # df03 is df02 but without any against-equation trips
-    against_calc = pd.read_csv('routes_against_calc.csv').iloc[:,0]
+    against_calc = pd.read_csv('../data/routes_against_calc.csv').iloc[:,0]
     df03 = df02[~df02['routedone'].isin(against_calc)]
 
     
     # df04 is df03 but without any trips where the train visited stations out of sequence.
     # In other words, df04 consists of only normal stadir ID values.
-    abnormal = pd.read_csv('abnormal_stadir_routes.csv').iloc[:,0]
+    abnormal = pd.read_csv('../data/abnormal_stadir_routes.csv').iloc[:,0]
     df04 = df03[~df03['routedone'].isin(abnormal)]
     
     return df04
