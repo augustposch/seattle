@@ -23,7 +23,7 @@ We see that the mean passenger values have maxima at weekday rush hours. Mon-Thu
 
 3. Let's figure out what kinds of times we might see **crowded observations**. Here's a week in late August 2019 at the Pioneer Square station. Keep in mind each rail vehicle has 74 seats plus standing room.
 
-![fig3](/images/ScatterPioneer1.png)
+![fig3](/images/ScatterPioneer2.png)
 
 Looking at the above plot gives us some insights.
 - T are more observations with >74 passengers for this station-week than in the dataset in general. By eye it appears that about a quarter of all these observations are >74 passengers, whereas other EDA revealed that only 10% of all observations are >74 passengers.

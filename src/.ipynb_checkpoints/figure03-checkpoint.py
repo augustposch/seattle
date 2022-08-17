@@ -65,7 +65,7 @@ ax.legend(handles, new_labels)
 sns.move_legend(ax, "upper left", bbox_to_anchor = (1,1))
 
 plt.show()
-plt.savefig('../images/ScatterPioneer1.png', bbox_inches='tight')
+plt.savefig('../images/troubleshoot.png', bbox_inches='tight')
 
 
 # Looking at the above plot gives us some insights.
