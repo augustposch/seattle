@@ -66,7 +66,30 @@ sns.move_legend(ax, "upper left", bbox_to_anchor = (1,1))
 
 plt.show()
 plt.savefig('../images/troubleshoot.png', bbox_inches='tight')
+plt.close()
 
+
+sns.set(rc={'figure.figsize':(12,4)},style='whitegrid')
+ax = sns.scatterplot(data=df[filt], x='stop arrival time', y='passwithin',
+                      style='stadir_ID', 
+                      markers=('o','^'),
+                      alpha=0.5,
+                      s=64,
+                      hue='DOW',
+                      palette='gist_rainbow')
+ax.axhline(74, linestyle='--', color='gray', label='Seats in Vehicle') # horizontal line at Crowded threshold
+ax.set_title('Observations at Pioneer Square station in late August', size=16)
+ax.set_ylabel('Passengers in vehicle')
+ax.set_xlabel('Date and time')
+
+handles, labels = ax.get_legend_handles_labels()
+new_labels = ['Monday','Tuesday','Wednesday','Thursday',
+              'Friday','Saturday','Sunday','Number of Seats','Southbound','Northbound']
+h_order = [1,2,3,4,5,6,7,11,9,10]
+new_handles = [handles[x] for x in h_order]
+ax.legend(new_handles, new_labels)
+sns.move_legend(ax, "upper left", bbox_to_anchor = (1,1))
+plt.savefig('../images/troubleshoot2.png', bbox_inches='tight')
 
 # Looking at the above plot gives us some insights.
 # - there more Crowded (>74 passengers) observations this station-week than in the dataset in general. By eye it appears that about a quarter of all these observations in Crowded.
