@@ -7,7 +7,7 @@ I am keeping this repository private, because the data was granted to me through
 
 **Please refer to Models_Aug02.ipynb for one giant notebook with all work done through 8/8/22.**
 
-## The story (8/16)
+## The story (8/18)
 
 1. To get familiar with the dataset, let's look at **which days and times we have observations**:
 
@@ -26,7 +26,7 @@ We see that the mean passenger values have maxima at weekday rush hours. Mon-Thu
 ![fig3](/images/ScatterPioneer2.png)
 
 Looking at the above plot gives us some insights.
-- T are more observations with >74 passengers for this station-week than in the dataset in general. By eye it appears that about a quarter of all these observations are >74 passengers, whereas other EDA revealed that only 10% of all observations are >74 passengers.
+- There are more observations with >74 passengers for this station-week than in the dataset in general. By eye it appears that about a quarter of all these observations are >74 passengers, whereas other EDA revealed that only 10% of all observations are >74 passengers.
 - The most-crowded times were weekday mornings and weekday evenings
 - On weekday mornings, all the most crowded trains were northbound. I assume these crowds are commuters.
 - On weekday evenings, all the most crowded trains were southbound. I assume these crowds are the commuters again.
@@ -71,9 +71,49 @@ Conclusions from loadings:
   - (from PC1) On weekday late-nights, outer stops may be more crowded than city center stops.
     - This is explained by the the airport stop and the college stop at either end - both would spur late-night crowds!
 
-9. Next step: Predictive modeling. But we'll be sure not to use future information to predict the past.
+9. Next step: Predictive modeling. We'll dedicate a whole section to this.
 
-*Add figure here when I do it*
+### Predictive modeling
+
+We are doing fine granularity short-term predictions. Suppose it's 10am and Rachel is considering catching a 10:30am train. Our input data comes from 8am to 10am. How well can we predict the 10:30am train's crowdedness, knowing what happened just recently?
+
+To capture the pattern from 8am to 10am, we split it up into 15-minute increments: 8:00 to 8:15, 8:15 to 8:30, ... , 9:45 to 10:00. In each 15-minute period, we calculate the mean number of passengers observed in any trains that came through.
+
+One more example. Suppose we're predicting passenger crowdedness at 1:42pm on October 6th. Our eight features come from earlier on October 6th. The eight features are: FMP_0 (the mean passengers from 11:12am to 11:27am), FMP_1 (the mean passengers from 11:27am to 11:42am), FMP_2 (the mean passengers from 11:42am to 11:57am), FMP_3 (the mean passengers from 11:57am to 12:12pm), etc., through FMP_7 (the mean passengers from 12:57pm to 1:12pm).
+
+For simplicity, we're *only* working with Pioneer Square station going Southbound.
+
+So, for every target crowdedness (number of passengers in vehicle) that we're trying to predict, we tell the computer to create those eight features. I call each feature an FMP, for Fifteen Minute Period. FMP_0, FMP_1, etc though FMP_7.
+
+Note that we get to dip into the entire dataset to create those features - we're not artificially blinding ourselves to any observations as it pertains to creating features. This is standard practice when working with time series data. However, a separate concept is that we're only working with our training dataset at the moment, which only consists of certain (80%) of the target observations. We won't use those test 20% of targets until the very end after selecting a model.
+
+All right, so our training dataset for Pioneer Square Southbound now has all its features. We have 30000 observations. Now what? I checked for NaNs and found a lot of them! These occur becuae there's often a 15-minute period in which no train shows up. I went with a three-step solution:
+1. Remove observations with 5 or more NaN features. This means we get rid of 4000 observations that had many NaN features, and we keep all observations that have at least 4 actual numbers as features. I figure that the ones I got rid of here weren't really actual time series, so weren't appropriate for this model. On the other hand, if an observation had just a one or two NaN features, those could be dealt with using interpolation.
+   - Side note: most of those 4000 I removed were in the 5am and 6am hours. See plot below.
+![fig9](images/PM_removed_obs.png)
+2. Of the remaining 26000 observations, I got 18000 to NaN-free after using linear interpolation. This means that if FMP_4 was 27, FMP_5 was NaN, and FMP_6 was 22, then FMP_5 gets filled as 24.5.
+3. For the remaining 8000 observations - these ones had multiple consecutive NaNs, so didn't get interpolated - I filled remaining NaNs with 0. I wish there were a better solution, but as it is this logic translates to "if there weren't any trains, then there must not have been any crowdedness". Perhaps most gaps in train service occur when demand is low anyway.
+
+So, we have 26000 observations, all of them have eight features with actual numbers, and we're ready to do some machine learning!
+
+I tried a Linear Regression, Random Forest, and Extra Trees models on both the eight-feature dataset and a four-feature dataset of only FMP_4, FMP_5, FMP_6, and FMP_7. I used 5-fold cross-validation to get score estimates and standard errors. I used a few different scores: RMSE helps describe the model's performance in pur regression terms; precision, recall, f1-score, and confusion matrix describe the model's performance in classification terms, where we threshold our y values at 74 to understand when the vehicle's seats are full.
+
+Reults:
+
+*Need to add bar chart of results here.*
+*All results are within /notebooks/Predictive_Models.ipynb for now, will add them here on Friday*
+
+
+In terms of RMSE, the Random Forest and the Extra Trees - both on the eight feature dataset - performed equally well, with RMSE around 25.6 and within 0.1 standard devations of each other. The other models were not far behind, just 2-3 standard deviations away. From this I conclude that going down to four features actually creates worse model performance, but just slightly worse.
+
+In terms of classification, it was a similar story. Random Forest on eight-feature dataset and Extra Trees on eight-feature dataset both achieved a mean f1-score of 0.69, wheras all other models had an f1-score around 0.65. COnsidering standard deviations were around 0.10, the best models had a significant advantage here.
+
+Next steps could include more types of models (e.g. KNN), some feature engineering (e.g. day of week, month, etc), and trying a different station-direction dataset.
+
+
+----
+
+
 
 That's it for now! All below this sentence is old.
 
