@@ -193,6 +193,7 @@ def cv_readout_r_to_c(model, X, y):
     
     print(sum_cm)
     print(agg_scores)
+    return sum_cm, agg_scores
     
 
 
@@ -262,4 +263,49 @@ def create_train_datasets(df05_train, feats, onehot=True, remove_borderline=True
     return X_train, y_train
 
 
+## Create train dataset for time series prediction
 
+def get_features_10x15min_for_row(pioneer, pioneer_ts, obs):
+    '''
+    Expects a dataframe of all passwithin observations, a Series of all the timestamps, and a row you're working with
+    '''
+    timestamp = pioneer.at[obs,'stop arrival time']
+    idx_start = timestamp - pd.DateOffset(minutes=150)
+    period_idx = pd.period_range(idx_start, freq='15min', periods=10)
+
+    # get FMP masks
+    FMP_masks = []  # FMP is a 15-minute period
+    for i in range(10):
+        boolean_membership = (pioneer_ts.index >= period_idx[i].start_time) & (pioneer_ts.index < period_idx[i].end_time)
+        FMP_masks.append(boolean_membership)
+    
+    # calculate mean for each FMP and add it to the pioneer dataframe
+    for i, FMP_mask in enumerate(FMP_masks):
+        meanpass = pioneer.loc[FMP_mask,'passwithin'].mean()
+        pioneer.at[obs,'FMP_'+str(i)] = meanpass
+        
+    return pioneer
+
+def get_features_10x15min(pioneer, pioneer_ts):
+
+    counter = 0
+    for obs in pioneer.index:
+        pioneer = get_features_10x15min_for_row(pioneer, pioneer_ts, obs)
+        counter += 1
+        if counter % 3000 == 0:
+            print('did',counter,'rows so far')
+    return pioneer
+
+
+class PersistenceRegressor(BaseEstimator):
+    def __init__(self):
+        self.placeholder = None
+        
+    def fit(self, X, y):
+        X, y = check_X_y(X, y, accept_sparse=True)
+        self.is_fitted_ = True
+        return self
+
+    def predict(self, X):
+        check_is_fitted(self)
+        return X
