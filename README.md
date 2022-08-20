@@ -3,9 +3,7 @@ Transit ridership prediction on the Seattle light rail.
 
 I am keeping this repository private, because the data was granted to me through a public records request.
 
-**8/15: Currently in the process of nicely organizing this repo. Please explore different sections of the project by reading the individual notebooks in the /notebooks folder.**
-
-**Please refer to Models_Aug02.ipynb for one giant notebook with all work done through 8/8/22.**
+**Please explore different sections of the project by reading the individual notebooks in the /notebooks folder.**
 
 ## The story (8/18)
 
@@ -111,9 +109,9 @@ Persistence from [t-45,t-30] period:
 f1 0.65 with standard error 0.02  
 rmse 29.50 with standard error 1.80  
 
-KNN with k=225 from all eight periods: (Best model)
-f1 0.70 with standard error 0.01
-rmse 24.80 with standard error 1.36
+KNN with k=225 from all eight periods: (Best model)  
+f1 0.70 with standard error 0.01  
+rmse 24.80 with standard error 1.36  
 
 
 Next steps could include some feature engineering (e.g. day of week, month, etc), and trying a different station-direction dataset.
