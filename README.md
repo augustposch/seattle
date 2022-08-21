@@ -80,11 +80,11 @@ Conclusions (preliminary) from loadings:
 
 ## Predictive modeling
 
-For simplicity, we restrict our dataset to Pioneer Square station going southbound. We'll be predicting the number of passengers in each arriving vehicle, based on previous observations of Pioneer Southbound arrivals over the past 2 1/2 hours.
+For simplicity, we restrict our dataset to Pioneer Square station going southbound. We'll be predicting the number of passengers in each arriving vehicle, based on previous observations of Pioneer Southbound arrivals over the past two-and-a-half hours.
 
 ### Understanding Pioneer Southbound
 
-From section 3 above we saw visuals as to what the Pioneer Southbound observations look like. Here they are again:
+9. From section 3 above we saw visuals as to what the Pioneer Southbound observations look like. Here they are again:
 
 ![fig3D](/images/ScatterPioneerWeds.png)
 
@@ -94,13 +94,13 @@ I chose Pioneer because it's a station that does consistently have crowded vehic
 
 Here are the Exploratory Data Analysis plots, but just for Pioneer.
 
-PS1.
+10. To get familiar with the Pioneer Southbound dataset, let's look at which days and times we have observations:
 
 ![fig1PS](/images/PSCountObs1.png)
 
-The above plot shows that the count of observations folows that same pattern as the entire dataset shown in Section 1 - more observations during weekday rush hours, because the Sound Transit runs more vehicles at that time.
+The count of observations follows the same pattern as the entire dataset shown in Section 1 - more observations during weekday rush hours, because the Sound Transit runs more vehicles at that time.
 
-PS2.
+11. For Pioneer Southbound, let's look at the **mean passengers** grouped by day of week and hour of day.
 
 ![fig2PS](/images/PSMeanPass1.png)
 
@@ -132,7 +132,7 @@ KNN with k=100 from all eight periods: (Best model)
 f1 0.70 with standard error 0.01  
 rmse 24.80 with standard error 1.36  
 
-R1. Let's make some bar charts showing all the results:
+12. Let's make some bar charts showing all the results:
 
 ![figX1](/images/rmse.png)
 ![figX2](/images/f1.png)
