@@ -5,7 +5,9 @@ I am keeping this repository private, because the data was granted to me through
 
 **Please explore different sections of the project by reading the individual notebooks in the /notebooks folder.**
 
-## The story (8/18)
+## The basics of our dataset
+
+This dataset is... *describe more here*
 
 1. To get familiar with the dataset, let's look at **which days and times we have observations**:
 
@@ -36,7 +38,7 @@ Below are a couple zoomed-in versions of the plots above. The first is only the 
 
 ![fig3C](/images/ScatterPioneerSat.png)
 
-## Understanding our entire dataset better
+## Understanding our entire dataset's patterns
 
 4. Let's find the **seasonal pattern** in crowdedness. A sinusoidal curve is common practice for a seasonal cycle, so that's what we'll fit.
 
@@ -77,14 +79,11 @@ Conclusions (preliminary) from loadings:
   - (from PC1) On weekday late-nights, outer stops may be more crowded than city center stops.
     - This is explained by the the airport stop and the college stop at either end - both would spur late-night crowds!
 
-## Understanding 
-9. Next step: Predictive modeling. We'll dedicate a whole section to this.
-
 ## Predictive modeling
 
 For simplicity, we restrict our dataset to Pioneer Square station going southbound. We'll be predicting the number of passengers in each arriving vehicle, based on previous observations of Pioneer Southbound arrivals over the past 2 1/2 hours.
 
-#### Understanding Pioneer Southbound
+### Understanding Pioneer Southbound
 
 From section 3 above we saw visuals as to what the Pioneer Southbound observations look like. Here they are again:
 
@@ -104,7 +103,7 @@ The above plot shows that the count of observations folows that same pattern as 
 
 The above plot shows that, on average we do expect the number of passengers to be >74 on weekdays from 4pm to 8pm.
 
-#### Setting up our dataset for machine learning
+### Setting up our dataset for machine learning
 
 Our targets are observations of the number of passengers in each vehicle. For each target that happens at time t, we construct ten features using the observations from (t - 150 minutes) through t. Each feature is a fifteen-minute period, and the value of the feature is the mean passengers from within that time period.
 
@@ -114,7 +113,7 @@ I used Persistence as our baseline model. This means we simply use the value of 
 
 I tried a Linear Regression, Random Forest, Extra Trees and K-Nearest Neighbors models on both the eight-feature dataset (t-150 through t-30) and a four-feature dataset (t-90 through t-30). I used 5-fold cross-validation to get score estimates and standard errors. I used a few different scores: RMSE helps describe the model's performance in pur regression terms; precision, recall, f1-score, and confusion matrix describe the model's performance in classification terms, where we threshold our y values at 74 to understand when the vehicle's seats are full.
 
-Results:
+### Results
 
 The best model, in terms of all cross-validation scores, was a k-nearest-neighbors regressor with k=225. It performed significantly better than either Persistence model. 
 
