@@ -2,7 +2,7 @@
 
 Transit crowdedness prediction on the Seattle light rail. I seek to understand patterns in when the vehicles are crowded, and develop a predictive model that uses past observations to predict how crowded a vehicle of interest will be 30 minutes from now.
 
-Please explore different sections of the project by reading the individual notebooks in the /notebooks folder. This repository is private, because the data was granted to me through a public records request.
+This Readme explains the most important figures and conclusions of the project. To explore different sections of the project, read the individual notebooks in the /notebooks folder (you can even run them for yourself!). If you just want to reproduce just one figure, you can run the .py in the /src folder. Finally, note this repository is private, because the data was granted to me through a public records request.
 
 ## The basics of our dataset
 
@@ -121,16 +121,16 @@ I tried a Linear Regression, Random Forest, Extra Trees and K-Nearest Neighbors 
 The best model, in terms of all cross-validation scores, was a k-nearest-neighbors regressor with k=100. It performed significantly better than either Persistence model. 
 
 Persistence from [t-15,t] period:  
-f1 0.69 with standard error 0.01  
-rmse 27.38 with standard error 1.93  
+- f1 0.69 with standard error 0.01  
+- rmse 27.38 with standard error 1.93  
 
 Persistence from [t-45,t-30] period:  
-f1 0.65 with standard error 0.02  
-rmse 29.50 with standard error 1.80  
+- f1 0.65 with standard error 0.02  
+- rmse 29.50 with standard error 1.80  
 
 KNN with k=100 from all eight periods: (Best model)  
-f1 0.70 with standard error 0.01  
-rmse 24.80 with standard error 1.36  
+- f1 0.70 with standard error 0.01  
+- rmse 24.80 with standard error 1.36  
 
 12. Let's make some bar charts showing all the results:
 
