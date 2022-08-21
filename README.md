@@ -36,6 +36,7 @@ Below are a couple zoomed-in versions of the plots above. The first is only the 
 
 ![fig3C](/images/ScatterPioneerSat.png)
 
+## Understanding our entire dataset better
 
 4. Let's find the **seasonal pattern** in crowdedness. A sinusoidal curve is common practice for a seasonal cycle, so that's what we'll fit.
 
@@ -69,22 +70,41 @@ Conclusions from plot:
 - PC1 mostly captures city center stations versus outer stations.
 - PC2 mostly captures Northbound vs Southbound.
 
-Conclusions from loadings:
+Conclusions (preliminary) from loadings:
   - (from PC2) On weekend mornings, Northbound stops may be more crowded than Southbound.
   - (from PC1) On weekend mornings, city center stops may be more crowded than outer stops.
   - (from PC2) On weekday 4-6pm times, Southbound stops may be more crowded than Northbound stops.
   - (from PC1) On weekday late-nights, outer stops may be more crowded than city center stops.
     - This is explained by the the airport stop and the college stop at either end - both would spur late-night crowds!
 
+## Understanding 
 9. Next step: Predictive modeling. We'll dedicate a whole section to this.
 
-### Predictive modeling
+## Predictive modeling
 
-For simplicity, we restrict our dataset to Pioneer Square station going southbound. From section 3 above we saw visuals as to what the Pioneer Southbound observations look like. Here they are again:
+For simplicity, we restrict our dataset to Pioneer Square station going southbound. We'll be predicting the number of passengers in each arriving vehicle, based on previous observations of Pioneer Southbound arrivals over the past 2 1/2 hours.
+
+#### Understanding Pioneer Southbound
+
+From section 3 above we saw visuals as to what the Pioneer Southbound observations look like. Here they are again:
 
 ![fig3D](/images/ScatterPioneerWeds.png)
 
 ![fig3E](/images/ScatterPioneerSat.png)
+
+I chose Pioneer because it's a station that does consistently have crowded vehicles, much more so than other stations. Transit riders will be extra curious to know if their arriving train at Pioneer will be crowded.
+
+Here are the Exploratory Data Analysis plots, but just for Pioneer.
+
+![fig1PS](/images/PSCountObs1.png)
+
+The above plot shows that the count of observations folows that same pattern as the entire dataset shown in Section 1 - more observations during weekday rush hours, because the Sound Transit runs more vehicles at that time.
+
+![fig2PS](/images/PSMeanPass1.png)
+
+The above plot shows that, on average we do expect the number of passengers to be >74 on weekdays from 4pm to 8pm.
+
+#### Setting up our dataset for machine learning
 
 Our targets are observations of the number of passengers in each vehicle. For each target that happens at time t, we construct ten features using the observations from (t - 150 minutes) through t. Each feature is a fifteen-minute period, and the value of the feature is the mean passengers from within that time period.
 
@@ -98,9 +118,6 @@ Results:
 
 The best model, in terms of all cross-validation scores, was a k-nearest-neighbors regressor with k=225. It performed significantly better than either Persistence model. 
 
-*Need to add bar chart of results here.*
-*All results are within /notebooks/Predictive_Models.ipynb which is decently clean-looking - but need better way to represent them here*
-
 Persistence from [t-15,t] period:  
 f1 0.69 with standard error 0.01  
 rmse 27.38 with standard error 1.93  
@@ -113,9 +130,30 @@ KNN with k=225 from all eight periods: (Best model)
 f1 0.70 with standard error 0.01  
 rmse 24.80 with standard error 1.36  
 
+Let's make some bar charts showing all the results:
 
-Next steps could include some feature engineering (e.g. day of week, month, etc), and trying a different station-direction dataset.
+![figX1](/images/rmse.png)
+![figX2](/images/f1.png)
+![figX3](/images/recall.png)
+![figX4](/images/precision.png)
 
+Model names:
+- pers, linreg, forest, extrees, and knn refer, respectively, to Persistence, Linear Regression, Random Forest, Extra Trees and K-Nearest Neighbors.
+- 00m refers to using the feature that ended 0 minutes prior to the target.
+- 30m refers to using the feature that ended 30 minutes prior to the target. (pers_30m is a good baseline for the context of a transit rider using an app.)
+- 8f refers to the eight-feature dataset - eight fifteen-minute periods from t-150 through t-30.
+- 4f refers to the four-feature dataset - four fifteen minute periods from t-90 through t-30.
+
+Conclusions:
+- The eight-feature dataset always outperformed the four-feature dataset when model type is held constant. Therefore, a hypothetical app should definitely take advantage of data going back 150 minutes.
+- The K-Nearest-Neighbors eight-feature model performed the best overall. It was either the best or near-best in RMSE, f1, and precision. In all metrics, it clearly beat the 30-minute persistence model, and also narrowly beat the 0-minute persistence model.
+- The Extra Trees model was the best for recall, on par with the not-real-world-applicable 0-minute persistence model.
+- These predictions are decent, but still not great for a transit rider. RMSE of 25 very-roughly means that predictions could be off by 25 people on a regular basis. Precision of 0.7 means that 70% of the times the model predicted Crowded (>74 passengers), it was correct. Recall of 0.7 means that 70% of the times the train was Crowded, the model predicted so.
+- As a next step we could use feature engineering (e.g. day of week, month, holiday, etc) to improve the model.
+- As another next step, we could try a different station or direction, and see if our findings hold at in that different context.
+- We are well on our way to an effective app to help transit riders choose when to ride the train.
+
+*validation curve for KNN at different values of k*
 
 #### Appendix
 
