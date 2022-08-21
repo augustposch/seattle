@@ -1,13 +1,12 @@
 # seattle
-Transit ridership prediction on the Seattle light rail.
 
-I am keeping this repository private, because the data was granted to me through a public records request.
+Transit crowdedness prediction on the Seattle light rail. I seek to understand patterns in when the vehicles are crowded, and develop a predictive model that uses past observations to predict how crowded a vehicle of interest will be 30 minutes from now.
 
-**Please explore different sections of the project by reading the individual notebooks in the /notebooks folder.**
+Please explore different sections of the project by reading the individual notebooks in the /notebooks folder. This repository is private, because the data was granted to me through a public records request.
 
 ## The basics of our dataset
 
-This dataset is... *describe more here*
+This dataset has observations of the number of passengers in a Seattle light rail vahicle for each time a train departs a station. For each observation, we have the exact date and time, as well as the station and the direction of travel.
 
 1. To get familiar with the dataset, let's look at **which days and times we have observations**:
 
@@ -95,9 +94,13 @@ I chose Pioneer because it's a station that does consistently have crowded vehic
 
 Here are the Exploratory Data Analysis plots, but just for Pioneer.
 
+PS1.
+
 ![fig1PS](/images/PSCountObs1.png)
 
 The above plot shows that the count of observations folows that same pattern as the entire dataset shown in Section 1 - more observations during weekday rush hours, because the Sound Transit runs more vehicles at that time.
+
+PS2.
 
 ![fig2PS](/images/PSMeanPass1.png)
 
@@ -115,7 +118,7 @@ I tried a Linear Regression, Random Forest, Extra Trees and K-Nearest Neighbors 
 
 ### Results
 
-The best model, in terms of all cross-validation scores, was a k-nearest-neighbors regressor with k=225. It performed significantly better than either Persistence model. 
+The best model, in terms of all cross-validation scores, was a k-nearest-neighbors regressor with k=100. It performed significantly better than either Persistence model. 
 
 Persistence from [t-15,t] period:  
 f1 0.69 with standard error 0.01  
@@ -125,11 +128,11 @@ Persistence from [t-45,t-30] period:
 f1 0.65 with standard error 0.02  
 rmse 29.50 with standard error 1.80  
 
-KNN with k=225 from all eight periods: (Best model)  
+KNN with k=100 from all eight periods: (Best model)  
 f1 0.70 with standard error 0.01  
 rmse 24.80 with standard error 1.36  
 
-Let's make some bar charts showing all the results:
+R1. Let's make some bar charts showing all the results:
 
 ![figX1](/images/rmse.png)
 ![figX2](/images/f1.png)
