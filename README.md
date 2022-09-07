@@ -6,7 +6,7 @@ This Readme explains the most important figures and conclusions of the project. 
 
 ## The basics of our dataset
 
-This dataset has observations of the number of passengers in a Seattle light rail vahicle for each time a train departs a station. For each observation, we have the exact date and time, as well as the station and the direction of travel.
+This dataset has observations of the number of passengers in a Seattle light rail vahicle for each time a train departs a station. For each observation, we have the exact date and time, as well as the station and the direction of travel. The dataset covers all of 2019.
 
 1. To get familiar with the dataset, let's look at **which days and times we have observations**:
 
