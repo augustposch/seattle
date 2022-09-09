@@ -2,11 +2,11 @@
 
 Transit crowdedness prediction on the Seattle light rail. I seek to understand patterns in when the vehicles are crowded, and develop a predictive model that uses past observations to predict how crowded a vehicle of interest will be 30 minutes from now.
 
-This Readme explains the most important figures and conclusions of the project. To explore different sections of the project, read the individual notebooks in the /notebooks folder (you can even run them for yourself!). If you just want to reproduce just one figure, you can run the .py in the /src folder. Finally, note the data was kindly granted to me by Sound Transit through a public records request. As such, this repository is private.
+This Readme explains the most important figures and conclusions of the project. To explore different sections of the project, read the individual notebooks in the /notebooks folder (you can even run them for yourself!). If you just want to reproduce just one figure, you can run the .py in the /src folder.
 
 ## The basics of our dataset
 
-This dataset has observations of the number of passengers in a Seattle light rail vahicle for each time a train departs a station. For each observation, we have the exact date and time, as well as the station and the direction of travel. The dataset covers all of 2019.
+Thank you to Sound Transit for giving me the dataset. This dataset has observations of the number of passengers in a Seattle light rail vahicle for each time a train departs a station. For each observation, we have the exact date and time, as well as the station and the direction of travel. The dataset covers all of 2019.
 
 1. To get familiar with the dataset, let's look at **which days and times we have observations**:
 
